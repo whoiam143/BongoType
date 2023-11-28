@@ -34,6 +34,13 @@ class MainWin(QMainWindow):
         self.reset_button.clicked.connect(self.reset_time)
         self.inserted_text.setText(self.x[self.counter])
 
+        self.rb5.toggled.connect(self.on_clicked)
+        self.rb15.toggled.connect(self.on_clicked)
+        self.rb25.toggled.connect(self.on_clicked)
+        self.rb50.toggled.connect(self.on_clicked)
+
+        self.rb5.setChecked(True)
+
         #self.gifka = QMovie("bongocat.gif")
         #self.gif.setMovie(self.gifka)
         #self.gifka.start()
@@ -52,8 +59,11 @@ class MainWin(QMainWindow):
                     try:
                         self.inserted_text.setText(self.x[self.counter])
                     except IndexError:
-                        self.messege_box()
-                        self.stop_time()
+                        self.save_result()
+                        self.counter = 0
+                        self.update_ex()
+                        self.inserted_text.setText(self.x[self.counter])
+                        print(self.x, self.counter)
 
             if text == "\x08":
                 self.TEXT = self.TEXT[:-1]
@@ -65,12 +75,6 @@ class MainWin(QMainWindow):
         else:
             self.TEXT += event.text()
             self.input_text.setText(self.TEXT)
-
-    def check(self, string, current_word, index_of_word):
-        print(self.x)
-
-        return string[index_of_word] == current_word.strip()
-
 
     def update_time(self):
         self.sec += 1
@@ -96,14 +100,35 @@ class MainWin(QMainWindow):
     def reset_time(self):
         self.sec = 0
         self.minut = 0
+        self.TEXT = ""
+        self.inserted_text.setText('')
 
     def messege_box(self):
-        let = [len(i) for i in self.x]
         wpm = str(int((self.number_of_words * 60) / ((self.minut * 60) + self.sec)))
         box = QMessageBox.information(self, "Result", F"You result is {wpm} wpm", QMessageBox.Ok, QMessageBox.Ok)
-        print(sum(let) / 5)
-        print(let)
         print(box)
+
+    def save_result(self):
+        self.messege_box()
+        self.stop_time()
+        self
+
+    def on_clicked(self):
+        rbt = self.sender()
+        try:
+            if rbt.isChecked():
+                self.number_of_words = int(rbt.text())
+                print(self.number_of_words)
+        except AttributeError:
+            pass
+
+    def update_ex(self):
+        self.x = " "
+        self.x = self.text.get_some_words()
+
+    @staticmethod
+    def check(string, current_word, index_of_word):
+        return string[index_of_word] == current_word.strip()
 
 
 if __name__ == "__main__":
