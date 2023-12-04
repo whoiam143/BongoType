@@ -1,2 +1,3 @@
 # BongoType
-<img scr = "presentation_files/logo.png">
+![logo.png](/logo.png) 
+
