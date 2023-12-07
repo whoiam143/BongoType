@@ -1,4 +1,5 @@
 # BongoType
+App for training speed of touch typing
 ## Автор ##
 
 Султанов Эмиль
